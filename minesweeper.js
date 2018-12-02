@@ -1286,7 +1286,7 @@ function check() {
 									if (!(i_65015 < L_65017)) break L6;
 										F.line = 3808;
 										box_65002 = line_64802[chckIndx(i_65015, 0, line_64802.length+0-1)-0];
-											if (!(box_65002.state == 0)) Tmp7 = false; else {												Tmp7 = !((box_65002.kind == -1));											}										if (Tmp7) {
+											if (!!((box_65002.state == 1))) Tmp7 = false; else {												Tmp7 = !((box_65002.kind == -1));											}										if (Tmp7) {
 										F.line = 112;
 										result_64593 = false;
 										break BeforeRet;

@@ -108,7 +108,7 @@ proc open(i, j: int; start: bool): bool {. exportc .} =
 proc check(): bool {. exportc .} =
   for line in field:
     for box in line:
-      if box.state == closed and box.kind != -1:
+      if box.state != opened and box.kind != -1:
         return false
   return true
 
