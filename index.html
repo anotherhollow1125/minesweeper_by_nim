@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>まいんすいーぱー</title>
+    <script src="./minesweeper.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+    <div id="field"></div>
+    <table>
+        <div>🏁: <span id="rest-bomb"></span></div>
+        <br />
+        <tbody>
+            <tr>
+                <td>サイズ</td><td><input name="size" type="number" min="5" value="10"></td>
+            </tr>
+            <tr>
+                <td>💣</td><td><input name="bomb" type="number" min="1" value="10"></td>
+            </tr>
+        </tbody>
+    </table>
+    <button>リセット</button>
+    <script>
+    var
+        size, bomb_num, rest_bomb, field_elm, field, game_over_flag;
+
+    function reset_game() {
+        game_over_flag = false;
+        size = parseInt(document.getElementsByName("size")[0].value);
+        bomb_num = parseInt(document.getElementsByName("bomb")[0].value);
+
+        if (bomb_num >= (size * size - 1) ) bomb_num = size * size - 1;
+
+        rest_bomb = document.getElementById("rest-bomb");
+        rest_bomb.innerHTML = bomb_num;
+        field_elm = document.getElementById("field");
+        field_elm.innerHTML = "";
+        // field_elm.style.marginBottom = size*20 + "px";
+        field_elm.style.width = size * 40 + "px";
+        field_elm.style.height = size * 40 + "px";
+        field = init(size, size, bomb_num);
+        for (var i=0; i < size; i++) {
+            var box_row = document.createElement("div");
+            box_row.classList.add("box-row");
+            box_row.style.width = size * 40 + "px";
+            for (var j=0; j < size; j++) {
+                var
+                    box = document.createElement("div"),
+                    clss = getBoxClass(i, j),
+                    kid = getBoxKind(i, j);
+                box.classList.add("box");
+                box.classList.add("closed");
+                if (clss != "") box.classList.add(clss);
+                box.setAttribute("data-kind", kid != -1 ? kid : "💣");
+                // box.innerHTML = kid != -1 ? kid : "💣";
+                box.setAttribute("data-i", i);
+                box.setAttribute("data-j", j);
+                box.addEventListener("contextmenu", function(e){
+                    e.preventDefault();
+                }, false);
+                box.addEventListener("mousedown", function(e){
+                    ti = parseInt(e.target.getAttribute("data-i"));
+                    tj = parseInt(e.target.getAttribute("data-j"));
+                    switch (e.button) {
+                        case 2:
+                            flag(ti, tj);
+                            break;
+                        case 0:
+                        default:
+                            if (getBoxState == "flaged") break;
+                            if (open(ti, tj, true) == false) {
+                                game_over_flag = true;
+                                e.target.style.backgroundColor = "red";
+                                gameOver();
+                                setTimeout(function() {alert("Game Over !");}, 100);
+                            }
+                            break;
+                    }
+                    if (check() && (game_over_flag == false)) {
+                        // gameOver();
+                        setTimeout(function() {alert("Game Clear !");}, 100);
+                    }
+                    updateField();
+                }, false);
+                box_row.appendChild(box);
+            }
+            field_elm.appendChild(box_row);
+        }
+    }
+
+    
+
+    function updateField() {
+        var box_rows = document.getElementsByClassName("box-row");
+        for (var i = 0; i < size; i++) {
+            var boxs = box_rows[i].getElementsByClassName("box");
+            for (var j = 0; j < size; j++) {
+                var box = boxs[j];
+                box.classList.remove("opened");
+                box.classList.remove("flaged");
+                box.classList.remove("closed");
+                var state = getBoxState(i, j);
+                box.classList.add(state);
+                switch (state) {
+                    case "opened":
+                        var kind = box.getAttribute("data-kind");
+                        box.innerHTML = kind != 0 ? kind : "" ;    
+                        break;
+                    case "flaged":
+                        box.innerHTML = "🏁";
+                        break;
+                    case "closed":
+                        box.innerHTML = "";
+                        break;
+                }
+            }
+        }
+        var flag_num = document.getElementsByClassName("flaged").length;
+        rest_bomb.innerHTML = bomb_num - flag_num;
+    }
+
+    reset_game();
+
+    document.getElementsByTagName("button")[0].addEventListener("click", reset_game, false);
+    </script>
+</body>
+</html>

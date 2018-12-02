@@ -1,0 +1,72 @@
+@charset "utf-8";
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body > * {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+div#field {
+    /* margin: auto; */
+    height: 100px; /* 20px であることをもとにjsで調整 */
+    width: 100px;
+    font-size: 24px;
+}
+
+div.box-row {
+    display: flex;
+    width: 100px; /* 20px であることをもとにjsで調整 */
+}
+
+div.box {
+    height: 36px;
+    width: 36px;
+}
+
+div.closed, div.flaged {
+    background-color: gray;
+    border: 2px groove gray;
+    /* color: gray; */
+}
+
+div.opened {
+    /* position: relative; */
+    background-color: #aaaaaa;
+    border: 2px solid #aaaaaa;
+}
+
+/* div.opened ::before {
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    content: attr(data-kind);
+    font-size: 10px;
+} */
+
+/* div.flaged ::before {
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    content: "🏁";
+    font-size: 10px;
+} */
+
+div.opened.one {
+    color: blue;
+}
+
+div.opened.two {
+    color: green;
+}
+
+div.opened.three {
+    color: red;
+}
+
+div.opened.many {
+    color: purple;
+}
